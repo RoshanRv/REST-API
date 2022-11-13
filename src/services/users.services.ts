@@ -1,7 +1,7 @@
 import { omit } from "lodash"
 import mongoose, { DocumentDefinition } from "mongoose"
-import usersModel from "../models/users.model"
-import UsersModel, { UserType } from "../models/users.model"
+import usersModel from "@models/users.model"
+import UsersModel, { UserType } from "@models/users.model"
 
 export const createUser = async (
     input: DocumentDefinition<
@@ -26,6 +26,7 @@ export const validateUser = async ({
 
     if (!user) return false
 
+    //.comparePassword is method created by me.. its defined is users.model
     const isValid = await user.comparePassword(password)
 
     if (!isValid) return false
@@ -34,5 +35,5 @@ export const validateUser = async ({
 }
 
 export const findUser = async (userId: string) => {
-    return await usersModel.findById(userId)
+    return await usersModel.findById(userId).lean()
 }

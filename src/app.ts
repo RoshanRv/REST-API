@@ -1,3 +1,4 @@
+require("module-alias/register")
 import express from "express"
 import config from "config"
 import * as dotenv from "dotenv"
@@ -11,6 +12,7 @@ import deserializedUser from "./middleware/deserializedUser"
 const PORT = config.get<number>("port")
 const app = express()
 app.use(express.json())
+//middleware.. runs everytime oru server gets a request
 app.use(deserializedUser)
 
 app.listen(PORT, async () => {

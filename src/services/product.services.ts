@@ -4,7 +4,7 @@ import {
     QueryOptions,
     UpdateQuery,
 } from "mongoose"
-import ProductModel, { ProductType } from "../models/product.model"
+import ProductModel, { ProductType } from "@models/product.model"
 
 export const createProduct = async (
     input: DocumentDefinition<Omit<ProductType, "createdAt" | "updatedAt">>

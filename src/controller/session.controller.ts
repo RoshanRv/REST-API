@@ -1,8 +1,8 @@
 import { Request, Response } from "express"
-import { createSession, findSessions } from "../services/session.services"
-import { validateUser } from "../services/users.services"
-import { updateSession } from "../services/session.services"
-import { signJWT } from "../utils/jwt.utils"
+import { createSession, findSessions } from "@services/session.services"
+import { validateUser } from "@services/users.services"
+import { updateSession } from "@services/session.services"
+import { signJWT } from "@utils/jwt.utils"
 import config from "config"
 
 export const createSessionHandler = async (req: Request, res: Response) => {
@@ -49,6 +49,7 @@ export const getSessionHandler = async (req: Request, res: Response) => {
     return res.send(sessions)
 }
 
+// sets valid = false for gn session
 export const deleteSessionHandler = async (req: Request, res: Response) => {
     const sessionId = res.locals.user.session
 

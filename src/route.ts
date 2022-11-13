@@ -4,25 +4,28 @@ import {
     createProductHandler,
     getProductHandler,
     updateProductHandler,
-} from "./controller/product.contoller"
+} from "@controller/product.contoller"
 import {
     createSessionHandler,
     deleteSessionHandler,
     getSessionHandler,
-} from "./controller/session.controller"
-import { createUserHandler } from "./controller/users.controller"
-import requireUser from "./middleware/requireUser"
-import validateResource from "./middleware/validateResources"
+} from "@controller/session.controller"
+import { createUserHandler } from "@controller/users.controller"
+
+import requireUser from "@middleware/requireUser"
+import validateResource from "@middleware/validateResources"
+
 import {
     createProductSchema,
     deleteProductSchema,
     getProductSchema,
     updateProductSchema,
-} from "./schema/product.schema"
-import { createSessionSchema } from "./schema/session.schema"
-import { createUserSchema } from "./schema/user.schema"
+} from "@schema/product.schema"
+import { createSessionSchema } from "@schema/session.schema"
+import { createUserSchema } from "@schema/user.schema"
 
 const routes = (app: Express) => {
+    //check server is alive or not
     app.get("/healthcheck", (req: Request, res: Response) =>
         res.sendStatus(200)
     )

@@ -1,5 +1,5 @@
 import mongoose from "mongoose"
-import { UserType } from "./users.model"
+import { UserType } from "@models/users.model"
 
 export interface SessionType extends mongoose.Document {
     user: UserType["_id"]

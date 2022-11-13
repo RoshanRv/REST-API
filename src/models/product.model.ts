@@ -1,8 +1,5 @@
 import mongoose from "mongoose"
-import { customRandom } from "nanoid"
-import { UserType } from "./users.model"
-
-//const nanoid = customAlphabet("abcdefghijklmnopqrstuvwxyz0123456789", 6)
+import { UserType } from "@models/users.model"
 
 export interface ProductType extends mongoose.Document {
     user: UserType["_id"]

@@ -1,9 +1,9 @@
 import { get } from "lodash"
 import config from "config"
 import { FilterQuery, UpdateQuery } from "mongoose"
-import sessionModel, { SessionType } from "../models/session.model"
-import { signJWT, verifyJWT } from "../utils/jwt.utils"
-import { findUser } from "./users.services"
+import sessionModel, { SessionType } from "@models/session.model"
+import { signJWT, verifyJWT } from "@utils/jwt.utils"
+import { findUser } from "@services/users.services"
 
 export const createSession = async (userId: string, userAgent: string) => {
     try {
@@ -36,7 +36,7 @@ export const reIssueAccessToken = async ({
 
     const session = await sessionModel.findById(get(decoded, "session"))
 
-    if (!session || !session.valid) return false
+    if (!session || !session.valid) return false //returns false if session doesnt exit or session.valid is false (i.e) loggedout
 
     const user = await findUser(session.user)
 
@@ -45,9 +45,7 @@ export const reIssueAccessToken = async ({
     const newAccessToken = signJWT(
         { ...user, session: session._id },
         "PRIVATE_ACCESS_KEY",
-        {
-            expiresIn: config.get<string>("accessTokenLife"),
-        }
+        { expiresIn: config.get<string>("accessTokenLife") }
     )
 
     return newAccessToken

@@ -4,19 +4,20 @@ import {
     deleteProductType,
     getProductType,
     updateProductType,
-} from "../schema/product.schema"
+} from "@schema/product.schema"
 import {
     createProduct,
     deleteProduct,
     findProduct,
     findProductAndUpdate,
-} from "../services/product.services"
+} from "@services/product.services"
 
 export const createProductHandler = async (
     req: Request<{}, {}, createProductType["body"]>,
     res: Response
 ) => {
-    const userId = res.locals.user._id
+    const userId = res.locals.user._id // stored during deserilaizedUser middleware and checked during requiredUser
+    console.log(res.locals.user)
     const body = req.body
 
     const product = await createProduct({ ...body, user: userId })
@@ -31,6 +32,8 @@ export const getProductHandler = async (
     const { productId } = req.params
 
     const product = await findProduct({ productId })
+
+    console.log(typeof product?.user)
 
     if (!product) return res.sendStatus(404)
 
@@ -49,7 +52,7 @@ export const updateProductHandler = async (
 
     if (!product) return res.sendStatus(404)
 
-    if (String(product.user) !== userId) return res.sendStatus(403)
+    if (String(product.user) !== userId) return res.sendStatus(403) //typeof product.user = Object , typeof userId = string
 
     const updateProduct = await findProductAndUpdate({ productId }, update, {
         new: true,
