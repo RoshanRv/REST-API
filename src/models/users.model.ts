@@ -53,7 +53,8 @@ UserSchema.pre("save", async function (next) {
     return next()
 })
 
-// comparePassword is a function created by me , it can be invoked by model.comparePassword()
+// comparePassword is a function created by me to validate password, it can be invoked by model.comparePassword()
+//It is invoked at users.services.ts
 
 UserSchema.methods.comparePassword = async function (
     canditatePassword: string
@@ -65,4 +66,4 @@ UserSchema.methods.comparePassword = async function (
         .catch((e) => false)
 }
 
-export default mongoose.model("UserModel", UserSchema)
+export default mongoose.model<UserType>("UserModel", UserSchema)
