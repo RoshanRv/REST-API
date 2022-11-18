@@ -1,44 +1,33 @@
 import { useForm } from "react-hook-form"
-import { object, string } from "zod"
+import { object, string, TypeOf } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 
 const UserSchema = object({
-    username: string({
-        required_error: "Username is Required",
-    }).min(3, "Too Short!!"),
-    password: string({
-        required_error: "Password is Required",
-    }).min(6, "Too Short!!!"),
-    passwordConfirmation: string({
-        required_error: "Confirm Password is Required",
-    }),
-    email: string({
-        required_error: "Email is Required",
-    }).email("Invalid Email"),
+    username: string().min(1, "Username Is Required"),
+    password: string().min(6, "Too Short!!!"),
+    passwordConfirmation: string().min(1, "Password Is Required"),
+    email: string().email("Invalid Email").min(1, "Email Is Required"),
 }).refine((data) => data.password == data.passwordConfirmation, {
     message: "Password Doesn't Match",
     path: ["passwordConfirmation"],
 })
+
+type UserInput = TypeOf<typeof UserSchema>
 
 const login = () => {
     const {
         register,
         formState: { errors },
         handleSubmit,
-    } = useForm({ resolver: zodResolver(UserSchema) })
+    } = useForm<UserInput>({ resolver: zodResolver(UserSchema) })
 
-    const onSubmit = (values: any) => {
+    const onSubmit = (values: UserInput) => {
         console.log(values)
     }
 
-    console.log(errors)
-
     return (
         <div className="flex justify-center items-center min-h-screen">
-            <form
-                onSubmit={handleSubmit(onSubmit)}
-                className="bg-white p-10 rounded-lg shadow-lg shadow-purple-300 w-max flex flex-col gap-y-8"
-            >
+            <form className="bg-white p-10 rounded-lg shadow-lg shadow-purple-300 w-max flex flex-col gap-y-8">
                 <div className="relative ">
                     <input
                         required
@@ -111,11 +100,12 @@ const login = () => {
                     )}
                 </div>
 
-                <input
-                    type={"submit"}
-                    value="submit"
+                <button
+                    onClick={handleSubmit(onSubmit)}
                     className="w-full py-2 text-white bg-purple-700 rounded-lg capitalize font-semibold cursor-pointer"
-                />
+                >
+                    Submit
+                </button>
             </form>
         </div>
     )
