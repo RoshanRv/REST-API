@@ -1,28 +1,48 @@
 import React from "react"
-import { ProductProp } from "../pages"
-import { FaEdit, FaTrash, FaUserEdit } from "react-icons/fa"
+import { ProductEditProp, ProductProp } from "../pages"
+import { FaEdit, FaTrash } from "react-icons/fa"
 import axios from "axios"
+import { useSWRConfig } from "swr"
 
 interface ProductCardProps {
     data: ProductProp
     editable?: boolean
+    setModal?: (val: boolean) => void
+    setModalData?: (val: ProductEditProp) => void
 }
 
-const deleteProductHandler = (id: string) => {
-    try {
-        console.log(id)
-        axios.delete(
-            `${process.env.NEXT_PUBLIC_SERVER_ENDPOINT}/api/products/${id}`,
-            { withCredentials: true }
-        )
-    } catch (e) {
-        console.log(e)
+const ProductCard = ({
+    data,
+    setModal,
+    editable = false,
+    setModalData,
+}: ProductCardProps) => {
+    const deleteProductHandler = async (id: string) => {
+        const { mutate } = useSWRConfig()
+
+        try {
+            await axios.delete(
+                `${process.env.NEXT_PUBLIC_SERVER_ENDPOINT}/api/products/${id}`,
+                { withCredentials: true }
+            )
+            mutate(
+                `${process.env.NEXT_PUBLIC_SERVER_ENDPOINT}/api/products/mine`
+            )
+        } catch (e) {
+            console.log(e)
+        }
     }
-}
 
-const ProductCard = ({ data, editable = false }: ProductCardProps) => {
+    const handleEditModal = () => {
+        if (setModal && setModalData) {
+            setModal(true)
+            const { title, description, image, price, productId } = data
+            setModalData({ title, description, image, price, productId })
+        }
+    }
+
     return (
-        <div className="p-3 group overflow-hidden relative rounded-lg shadow-lg shadow-purple-400 flex flex-col gap-y-4  w-[25rem] md:w-[35rem] border-4 border-purple-400 bg-white">
+        <div className="p-3 group overflow-hidden relative rounded-lg shadow-lg shadow-purple-400 flex flex-col gap-y-4  w-[25rem] md:w-[35rem]   border-4 border-purple-400 bg-white">
             {/* editable  */}
             {editable && (
                 <div className=" text-gray-700 text-xl group-hover:left-[2%] -left-full p-2 rounded-md transition-all bg-purple-300/80 absolute duration-300 flex flex-col gap-y-4">
@@ -31,13 +51,13 @@ const ProductCard = ({ data, editable = false }: ProductCardProps) => {
                     >
                         <FaTrash className="" />
                     </button>
-                    <button>
+                    <button onClick={handleEditModal}>
                         <FaEdit className="" />
                     </button>
                 </div>
             )}
 
-            <div className="">
+            <div className="max-h-[20rem]">
                 <img
                     src={data.image}
                     alt=""
