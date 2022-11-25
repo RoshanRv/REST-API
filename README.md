@@ -1,10 +1,12 @@
-# Rest API UI
+# Rest API WebApp
 
-A FrontEnd UI to Fetch, Add, Update & Delete Users Details, Session, & Products With Authentication.
+A Webapp to Fetch, Add, Update & Delete Users Details, Session, & Products With Authentication.
 
 ![preview](https://media-exp1.licdn.com/dms/image/C5622AQHcJ4jrqJ5nlQ/feedshare-shrink_800/0/1669389984867?e=1672272000&v=beta&t=wU9G3yL3k9UR8uXmWJxtLxUAoAkTn3wAaQs32hBVjvE)
 
 ## Technologies :
+
+### Frontend
 
 -   Next JS
 -   SWR
@@ -12,6 +14,12 @@ A FrontEnd UI to Fetch, Add, Update & Delete Users Details, Session, & Products 
 -   Typescript
 -   Zod Validation
 
-## Source
+### Backend
 
-This UI is Based on a Tutorial By [tomDoesTech](https://www.youtube.com/watch?v=oSz23pPBpFY)
+-   Node JS
+-   Express JS
+-   Typescript
+-   Json Web Tokens
+-   MongoDB
+-   Mongoose
+-   Zod Validation
