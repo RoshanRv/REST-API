@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import axios from "axios"
 import { useState } from "react"
 import { useRouter } from "next/router"
+import { AuthProps } from "../../components/Header"
 
 const UserSchema = object({
     password: string().min(6, "Too Short!!!"),
@@ -12,7 +13,7 @@ const UserSchema = object({
 
 type UserInput = TypeOf<typeof UserSchema>
 
-const login = () => {
+const login = ({ auth, setAuth }: AuthProps) => {
     const {
         register,
         formState: { errors },
@@ -30,6 +31,7 @@ const login = () => {
                 values,
                 { withCredentials: true }
             )
+            setAuth(true)
             router.push("/")
         } catch (e: any) {
             setLoginError(e.message)
@@ -37,7 +39,7 @@ const login = () => {
     }
 
     return (
-        <div className="flex justify-center items-center min-h-screen">
+        <div className="flex justify-center items-center min-h-screen bg-gradient-to-br  from-sky-300 to-sky-500 ">
             <form className="bg-white p-10 rounded-lg shadow-lg shadow-purple-300 w-max flex flex-col gap-y-8">
                 <div className="relative ">
                     <input

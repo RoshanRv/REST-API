@@ -42,7 +42,7 @@ const ProductCard = ({
     }
 
     return (
-        <div className="p-3 group overflow-hidden relative rounded-lg shadow-lg shadow-purple-400 flex flex-col gap-y-4  w-[25rem] md:w-[35rem]   border-4 border-purple-400 bg-white">
+        <div className="p-3 group overflow-hidden relative rounded-lg shadow-lg shadow-purple-400 flex flex-col gap-y-4  w-full max-w-[25rem] lg:w-[30rem]   border-4 border-purple-400 bg-white">
             {/* editable  */}
             {editable && (
                 <div className=" text-gray-700 text-xl group-hover:left-[2%] -left-full p-2 rounded-md transition-all bg-purple-300/80 absolute duration-300 flex flex-col gap-y-4">

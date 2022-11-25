@@ -77,7 +77,7 @@ const CreateModal = ({ showModal, data, edit = false }: ModalProps) => {
 
     return (
         <div className="fixed top-0 left-0 bg-black/50 w-full h-full flex justify-center items-center z-50">
-            <div className="bg-white p-10 pt-4 rounded-lg shadow-lg shadow-purple-300 w-max  border-2 border-purple-500 relative">
+            <div className="bg-white p-10 pt-4 rounded-lg shadow-lg shadow-purple-300 sm:w-max w-full  border-2 border-purple-500 relative">
                 {/*    Close Btn      */}
                 <button
                     className="absolute top-5 right-5 text-xl"
@@ -96,7 +96,7 @@ const CreateModal = ({ showModal, data, edit = false }: ModalProps) => {
                         <input
                             type={"text"}
                             {...register("title")}
-                            className=" p-1 border-b-2 focus:border-purple-700 border-black text-lg outline-0 peer placeholder:text-transparent bg-transparent w-80"
+                            className=" p-1 border-b-2 focus:border-purple-700 border-black text-lg outline-0 peer placeholder:text-transparent bg-transparent  w-full sm:w-80"
                             placeholder="title"
                         />
                         <label className="text-gray-400 text-sm absolute left-1 transition-all -top-5 peer-placeholder-shown:top-0 peer-focus:text-purple-700 peer-placeholder-shown:text-lg select-none pointer-events-none peer-focus:-top-5 peer-focus:text-sm">
@@ -113,7 +113,7 @@ const CreateModal = ({ showModal, data, edit = false }: ModalProps) => {
                         <input
                             type={"text"}
                             {...register("price")}
-                            className=" p-1 border-b-2 focus:border-purple-700 border-black text-lg outline-0 peer placeholder:text-transparent bg-transparent w-80"
+                            className=" p-1 border-b-2 focus:border-purple-700 border-black text-lg outline-0 peer placeholder:text-transparent bg-transparent  w-full sm:w-80"
                             placeholder="price"
                         />
                         <label className="text-gray-400 text-sm absolute left-1 transition-all -top-5 peer-placeholder-shown:top-0 peer-focus:text-purple-700 peer-placeholder-shown:text-lg select-none pointer-events-none peer-focus:-top-5 peer-focus:text-sm">
@@ -129,7 +129,7 @@ const CreateModal = ({ showModal, data, edit = false }: ModalProps) => {
                     <div className="relative ">
                         <textarea
                             {...register("description")}
-                            className=" p-1 border-b-2 focus:border-purple-700 border-black text-lg outline-0 peer placeholder:text-transparent bg-transparent w-80"
+                            className=" p-1 border-b-2 focus:border-purple-700 border-black text-lg outline-0 peer placeholder:text-transparent bg-transparent  w-full sm:w-80"
                             placeholder="description"
                         />
                         <label className="text-gray-400 text-sm absolute left-1 transition-all -top-5 peer-placeholder-shown:top-0 peer-focus:text-purple-700 peer-placeholder-shown:text-lg select-none pointer-events-none peer-focus:-top-5 peer-focus:text-sm">
@@ -146,7 +146,7 @@ const CreateModal = ({ showModal, data, edit = false }: ModalProps) => {
                         <input
                             type={"text"}
                             {...register("image")}
-                            className=" p-1 border-b-2 focus:border-purple-700 border-black text-lg outline-0 peer placeholder:text-transparent bg-transparent w-80"
+                            className=" p-1 border-b-2 focus:border-purple-700 border-black text-lg outline-0 peer placeholder:text-transparent bg-transparent  w-full sm:w-80"
                             placeholder="image"
                         />
                         <label className="text-gray-400 text-sm absolute left-1 transition-all -top-5 peer-placeholder-shown:top-0 peer-focus:text-purple-700 peer-placeholder-shown:text-lg select-none pointer-events-none peer-focus:-top-5 peer-focus:text-sm">

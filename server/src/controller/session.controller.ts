@@ -73,6 +73,24 @@ export const deleteSessionHandler = async (req: Request, res: Response) => {
 
     await updateSession({ _id: sessionId }, { valid: false })
 
+    res.cookie("accessToken", null, {
+        httpOnly: true,
+        maxAge: 300,
+        domain: "localhost",
+        sameSite: "strict",
+        secure: false,
+        path: "/",
+    })
+
+    res.cookie("refreshToken", null, {
+        httpOnly: true,
+        maxAge: 300,
+        domain: "localhost",
+        sameSite: "strict",
+        secure: false,
+        path: "/",
+    })
+
     return res.send({
         accessToken: null,
         refreshToken: null,
