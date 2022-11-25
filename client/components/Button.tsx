@@ -1,3 +1,4 @@
+import Link from "next/link"
 import React from "react"
 
 interface ButtonProps {
@@ -6,6 +7,10 @@ interface ButtonProps {
     full?: boolean
     large?: boolean
     onClickHandler?: any
+}
+
+interface LinkButtonProps extends ButtonProps {
+    link: string
 }
 
 const Button = ({
@@ -27,6 +32,29 @@ const Button = ({
         >
             {text}
         </button>
+    )
+}
+
+export const LinkButton = ({
+    text,
+    style,
+    full = false,
+    large = false,
+    link,
+}: LinkButtonProps) => {
+    return (
+        <Link href={link}>
+            <button
+                className={`py-2 px-8 rounded-lg capitalize font-semibold cursor-pointer text-lg outline-0
+        ${style == "primary" && "text-white bg-purple-500"}
+        ${style == "secondary" && "text-purple-700 bg-white"}
+        ${full && "w-full"}
+        ${large && "text-2xl"}
+        `}
+            >
+                {text}
+            </button>
+        </Link>
     )
 }
 
