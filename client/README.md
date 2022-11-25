@@ -7,6 +7,7 @@ A FrontEnd UI to Fetch, Add, Update & Delete Users Details, Session, & Products 
 ## Technologies :
 
 -   Next JS
+-   TailwindCSS
 -   SWR
 -   React Hook Forms
 -   Typescript

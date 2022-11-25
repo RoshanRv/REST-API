@@ -9,6 +9,7 @@ A Webapp to Fetch, Add, Update & Delete Users Details, Session, & Products With 
 ### Frontend
 
 -   Next JS
+-   TailwindCSS
 -   SWR
 -   React Hook Forms
 -   Typescript
