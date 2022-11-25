@@ -1,7 +1,8 @@
 import type { NextPage } from "next"
+import { useEffect, useState } from "react"
 import useSWR from "swr"
-import Button from "../components/Button"
-import CreateModal from "../components/CreateModal"
+import Button, { LinkButton } from "../components/Button"
+import ProductModal, { ProductInputProp } from "../components/ProductModal"
 import ProductCard from "../components/ProductCard"
 import fetcher from "../utils/fetcher"
 
@@ -30,7 +31,15 @@ export interface ProductProp {
     user: string
 }
 
+export interface ProductEditProp extends ProductInputProp {
+    productId: string
+}
+
 const Home: NextPage = () => {
+    const [showCreateModal, setShowCreateModal] = useState(false)
+    const [showEditModal, setShowEditModal] = useState(false)
+    const [modalData, setModalData] = useState({} as ProductEditProp)
+
     const { data } = useSWR<UserProps>(
         `${process.env.NEXT_PUBLIC_SERVER_ENDPOINT}/api/me`,
         fetcher
@@ -45,6 +54,11 @@ const Home: NextPage = () => {
         `${process.env.NEXT_PUBLIC_SERVER_ENDPOINT}/api/products`,
         fetcher
     )
+
+    useEffect(() => {
+        if (data) return localStorage.setItem("auth", "true")
+        return localStorage.setItem("auth", "false")
+    }, [data])
 
     return (
         <>
@@ -63,12 +77,26 @@ const Home: NextPage = () => {
                         {/*   Create Or Login btn   */}
                         {data ? (
                             <div>
-                                <Button text="Create" style="secondary" />
+                                <Button
+                                    text="Create"
+                                    style="secondary"
+                                    onClickHandler={() =>
+                                        setShowCreateModal(true)
+                                    }
+                                />
                             </div>
                         ) : (
                             <div className="flex gap-x-6">
-                                <Button text="Sign In" style="primary" />
-                                <Button text="Log In" style="secondary" />
+                                <LinkButton
+                                    text="Sign In"
+                                    style="primary"
+                                    link={"/auth/register"}
+                                />
+                                <LinkButton
+                                    text="Log In"
+                                    style="secondary"
+                                    link={"/auth/login"}
+                                />
                             </div>
                         )}
                     </div>
@@ -83,6 +111,8 @@ const Home: NextPage = () => {
                                         key={i}
                                         data={product}
                                         editable
+                                        setModal={setShowEditModal}
+                                        setModalData={setModalData}
                                     />
                                 ))}
                             </div>
@@ -113,7 +143,14 @@ const Home: NextPage = () => {
                         ))}
                 </section>
             </main>
-            <CreateModal />
+            {showCreateModal && <ProductModal showModal={setShowCreateModal} />}
+            {showEditModal && (
+                <ProductModal
+                    showModal={setShowEditModal}
+                    edit
+                    data={modalData}
+                />
+            )}
         </>
     )
 }
