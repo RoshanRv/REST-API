@@ -1,6 +1,9 @@
 import { useForm } from "react-hook-form"
 import { object, string, TypeOf } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
+import axios from "axios"
+import { useState } from "react"
+import { useRouter } from "next/router"
 
 const UserSchema = object({
     password: string().min(6, "Too Short!!!"),
@@ -16,8 +19,21 @@ const login = () => {
         handleSubmit,
     } = useForm<UserInput>({ resolver: zodResolver(UserSchema) })
 
+    const [loginError, setLoginError] = useState(null)
+
+    const router = useRouter()
+
     const onSubmit = (values: UserInput) => {
-        console.log(values)
+        try {
+            axios.post(
+                `${process.env.NEXT_PUBLIC_SERVER_ENDPOINT}/api/sessions`,
+                values,
+                { withCredentials: true }
+            )
+            router.push("/")
+        } catch (e: any) {
+            setLoginError(e.message)
+        }
     }
 
     return (
