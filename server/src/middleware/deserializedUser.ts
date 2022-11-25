@@ -8,8 +8,11 @@ const deserializedUser = async (
     res: Response,
     next: NextFunction
 ) => {
-    const accessToken = req.headers.authorization?.split(" ")[1] //[Bearer, <accessToken>]
-    const refreshToken = get(req, "headers.x-refresh")
+    const accessToken =
+        get(req, "cookies.accessToken") ||
+        req.headers.authorization?.split(" ")[1] //[Bearer, <accessToken>]
+    const refreshToken =
+        get(req, "cookies.refreshToken") || get(req, "headers.x-refresh")
 
     if (!accessToken) return next()
 
@@ -21,13 +24,22 @@ const deserializedUser = async (
         return next()
     }
 
-    //res.locals.user = undefined if accesstoken is valid...
+    //res.locals.user = undefined if accesstoken is invalid...
 
     if (expired && refreshToken && typeof refreshToken == "string") {
         const newAccessToken = await reIssueAccessToken({ refreshToken })
 
         if (newAccessToken) {
             res.setHeader("x-access-token", newAccessToken)
+
+            res.cookie("accessToken", newAccessToken, {
+                httpOnly: true,
+                maxAge: 3.154e10,
+                domain: "localhost",
+                sameSite: "strict",
+                secure: false,
+                path: "/",
+            })
         }
 
         const result = verifyJWT(newAccessToken as string, "PUBLIC_ACCESS_KEY")

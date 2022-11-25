@@ -36,6 +36,8 @@ export const reIssueAccessToken = async ({
 
     const session = await sessionModel.findById(get(decoded, "session"))
 
+    // to make sure that the session/user is not sign out
+
     if (!session || !session.valid) return false //returns false if session doesnt exit or session.valid is false (i.e) loggedout
 
     const user = await findUser(session.user)

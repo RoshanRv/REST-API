@@ -16,6 +16,15 @@ export const findProduct = async (query: FilterQuery<ProductType>) => {
     return await ProductModel.findOne(query)
 }
 
+export const findProducts = async (query: FilterQuery<ProductType>) => {
+    return await ProductModel.find(query)
+}
+
+export const findAllProducts = async () => {
+    return await ProductModel.find()
+}
+
+
 export const findProductAndUpdate = async (
     query: FilterQuery<ProductType>,
     update: UpdateQuery<ProductType>,

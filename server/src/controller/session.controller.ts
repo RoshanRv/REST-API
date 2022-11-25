@@ -35,6 +35,24 @@ export const createSessionHandler = async (req: Request, res: Response) => {
             { expiresIn: config.get<string>("refreshTokenLife") }
         )
 
+        res.cookie("accessToken", accessToken, {
+            httpOnly: true,
+            maxAge: 3.154e10,
+            domain: "localhost",
+            sameSite: "strict",
+            secure: false,
+            path: "/",
+        })
+
+        res.cookie("refreshToken", refreshToken, {
+            httpOnly: true,
+            maxAge: 3.154e10,
+            domain: "localhost",
+            sameSite: "strict",
+            secure: false,
+            path: "/",
+        })
+
         res.send({ accessToken, refreshToken })
     } catch (e: any) {
         return res.send(e.message)

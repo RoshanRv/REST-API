@@ -14,7 +14,7 @@ const validate =
             })
             next()
         } catch (e: any) {
-            return res.status(400).send(e.errors)
+            return res.status(409).send(e.errors)
         }
     }
 

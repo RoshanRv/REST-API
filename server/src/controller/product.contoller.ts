@@ -8,8 +8,10 @@ import {
 import {
     createProduct,
     deleteProduct,
+    findAllProducts,
     findProduct,
     findProductAndUpdate,
+    findProducts,
 } from "@services/product.services"
 
 export const createProductHandler = async (
@@ -25,6 +27,8 @@ export const createProductHandler = async (
     return res.send(product)
 }
 
+// One products by productID
+
 export const getProductHandler = async (
     req: Request<getProductType["params"]>,
     res: Response
@@ -33,11 +37,38 @@ export const getProductHandler = async (
 
     const product = await findProduct({ productId })
 
-    console.log(typeof product?.user)
-
     if (!product) return res.sendStatus(404)
 
     return res.send(product)
+}
+
+// get my products (product by user id)
+export const getProductsByMeHandler = async (eq: Request, res: Response) => {
+    const userId = res.locals.user._id
+
+    const products = await findProducts({ user: userId })
+
+    return res.send(products)
+}
+
+// all products
+
+export const getProductsHandler = async (req: Request, res: Response) => {
+    let products
+
+    products = await findAllProducts()
+
+    // filterting products (shows other's products neglecting user's product)
+
+    if (res.locals.user) {
+        const userId = res.locals.user._id
+        const filteredProducts = products.filter(
+            (product) => product.user != userId
+        )
+        return res.send(filteredProducts)
+    }
+
+    return res.send(products)
 }
 
 export const updateProductHandler = async (

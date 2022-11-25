@@ -33,3 +33,7 @@ export const createUserHandler = async (
         res.status(409).send(e.message)
     }
 }
+
+export const getCurrentUserHandler = async (req: Request, res: Response) => {
+    return res.send(res.locals.user)
+}
