@@ -11,6 +11,7 @@ import {
     createSessionHandler,
     deleteSessionHandler,
     getSessionHandler,
+    googleAuthHandler,
 } from "@controller/session.controller"
 import {
     createUserHandler,
@@ -63,12 +64,16 @@ const routes = (app: Express) => {
 
     app.delete("/api/sessions", requireUser, deleteSessionHandler)
 
+    // login using google
+
+    app.get("/api/sessions/oauth/google", googleAuthHandler)
+
     // fetch all products
 
     app.get("/api/products", getProductsHandler)
 
     // fetch my products (fetch by user id)
-    app.get("/api/products/mine",requireUser ,getProductsByMeHandler)
+    app.get("/api/products/mine", requireUser, getProductsByMeHandler)
 
     // fetch product by id
 
