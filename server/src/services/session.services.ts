@@ -1,9 +1,11 @@
 import { get } from "lodash"
+import qs from "qs"
 import config from "config"
 import { FilterQuery, UpdateQuery } from "mongoose"
 import sessionModel, { SessionType } from "@models/session.model"
 import { signJWT, verifyJWT } from "@utils/jwt.utils"
 import { findUser } from "@services/users.services"
+import axios from "axios"
 
 export const createSession = async (userId: string, userAgent: string) => {
     try {
@@ -51,4 +53,46 @@ export const reIssueAccessToken = async ({
     )
 
     return newAccessToken
+}
+
+interface GoogleTokenProps {
+    access_token: string
+    expires_in: number
+    refresh_token: string
+    scope: string
+    token_type: string
+    id_token: string
+}
+
+export const getGoogleOauthTokens = async ({
+    code,
+}: {
+    code: string
+}): Promise<GoogleTokenProps> => {
+    const url = `https://oauth2.googleapis.com/token`
+
+    const values = {
+        code,
+        client_id: process.env.GOOGLE_CLIENT_ID,
+        client_secret: process.env.GOOGLE_CLIENT_SECRET,
+        redirect_uri: process.env.GOOGLE_REDIRECT_URI,
+        grant_type: "authorization_code",
+    }
+
+    try {
+        const res = await axios.post<GoogleTokenProps>(
+            url,
+            qs.stringify(values),
+            {
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+            }
+        )
+
+        return res.data
+    } catch (e: any) {
+        console.log(e)
+        throw new Error(e.message)
+    }
 }

@@ -1,9 +1,29 @@
-import { Request, Response } from "express"
-import { createSession, findSessions } from "@services/session.services"
-import { validateUser } from "@services/users.services"
+import { CookieOptions, Request, Response } from "express"
+import {
+    createSession,
+    findSessions,
+    getGoogleOauthTokens,
+} from "@services/session.services"
+import {
+    findAndUpdateUser,
+    getGoogleUser,
+    validateUser,
+} from "@services/users.services"
 import { updateSession } from "@services/session.services"
 import { signJWT } from "@utils/jwt.utils"
+import jwt, { JwtPayload } from "jsonwebtoken"
 import config from "config"
+
+const accessTokenOptions: CookieOptions = {
+    httpOnly: true,
+    maxAge: 900000,
+    domain: "localhost",
+    sameSite: "lax",
+    secure: false,
+    path: "/",
+}
+
+const refreshTokenOptions = { ...accessTokenOptions, maxAge: 3.154e10 }
 
 export const createSessionHandler = async (req: Request, res: Response) => {
     try {
@@ -35,23 +55,9 @@ export const createSessionHandler = async (req: Request, res: Response) => {
             { expiresIn: config.get<string>("refreshTokenLife") }
         )
 
-        res.cookie("accessToken", accessToken, {
-            httpOnly: true,
-            maxAge: 3.154e10,
-            domain: "localhost",
-            sameSite: "strict",
-            secure: false,
-            path: "/",
-        })
+        res.cookie("accessToken", accessToken, accessTokenOptions)
 
-        res.cookie("refreshToken", refreshToken, {
-            httpOnly: true,
-            maxAge: 3.154e10,
-            domain: "localhost",
-            sameSite: "strict",
-            secure: false,
-            path: "/",
-        })
+        res.cookie("refreshToken", refreshToken, refreshTokenOptions)
 
         res.send({ accessToken, refreshToken })
     } catch (e: any) {
@@ -67,32 +73,92 @@ export const getSessionHandler = async (req: Request, res: Response) => {
     return res.send(sessions)
 }
 
-// sets valid = false for gn session
+// sets valid = false for given session
 export const deleteSessionHandler = async (req: Request, res: Response) => {
     const sessionId = res.locals.user.session
 
     await updateSession({ _id: sessionId }, { valid: false })
 
-    res.cookie("accessToken", null, {
-        httpOnly: true,
-        maxAge: 300,
-        domain: "localhost",
-        sameSite: "strict",
-        secure: false,
-        path: "/",
-    })
+    res.clearCookie("accessToken")
+    res.clearCookie("refreshToken")
 
-    res.cookie("refreshToken", null, {
-        httpOnly: true,
-        maxAge: 300,
-        domain: "localhost",
-        sameSite: "strict",
-        secure: false,
-        path: "/",
-    })
+    // res.cookie("accessToken", null, {
+    //     httpOnly: true,
+    //     maxAge: 300,
+    //     domain: "localhost",
+    //     sameSite: "strict",
+    //     secure: false,
+    //     path: "/",
+    // })
+
+    // res.cookie("refreshToken", null, {
+    //     httpOnly: true,
+    //     maxAge: 300,
+    //     domain: "localhost",
+    //     sameSite: "strict",
+    //     secure: false,
+    //     path: "/",
+    // })
 
     return res.send({
         accessToken: null,
         refreshToken: null,
     })
+}
+
+export const googleAuthHandler = async (req: Request, res: Response) => {
+    try {
+        //get code from query
+        const code = req.query.code as string
+
+        // get id and access token using code
+        const { access_token, id_token } = await getGoogleOauthTokens({ code })
+
+        // get user from id_token
+        const googleUser = await getGoogleUser({ access_token, id_token })
+        //const decoded  = jwt.decode(id_token)
+
+        if (!googleUser.verified_email)
+            return res.status(403).send("Email Is Not Verified")
+
+        // upsert the user
+
+        const user = await findAndUpdateUser(
+            { email: googleUser.email },
+            { email: googleUser.email, name: googleUser.name },
+            { new: true, upsert: true }
+        )
+
+        if (!user) return res.status(404).send("User Not Found")
+
+        // create session
+
+        const session = await createSession(
+            user._id,
+            req.get("user-agent") || ""
+        )
+
+        //generate a access token
+        const accessToken = signJWT(
+            { ...user, session: session._id },
+            "PRIVATE_ACCESS_KEY",
+            { expiresIn: config.get<string>("accessTokenLife") }
+        )
+
+        //generate a refresh token
+        const refreshToken = signJWT(
+            { ...user, session: session._id },
+            "PRIVATE_REFRESH_KEY",
+            { expiresIn: config.get<string>("refreshTokenLife") }
+        )
+
+        res.cookie("accessToken", accessToken, accessTokenOptions)
+
+        res.cookie("refreshToken", refreshToken, refreshTokenOptions)
+
+        return res.redirect(`${config.get("origin")}`)
+    } catch (e) {
+        console.log(e)
+        return res.redirect(`${config.get("origin")}/auth/login`)
+    }
 }
