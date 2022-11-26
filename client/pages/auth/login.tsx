@@ -5,6 +5,8 @@ import axios from "axios"
 import { useState } from "react"
 import { useRouter } from "next/router"
 import { AuthProps } from "../../components/Header"
+import Button from "../../components/Button"
+import getGoogleUrl from "../../utils/getGoogleUrl"
 
 const UserSchema = object({
     password: string().min(6, "Too Short!!!"),
@@ -40,7 +42,7 @@ const login = ({ auth, setAuth }: AuthProps) => {
 
     return (
         <div className="flex justify-center items-center min-h-screen bg-gradient-to-br  from-sky-300 to-sky-500 ">
-            <form className="bg-white p-10 rounded-lg shadow-lg shadow-purple-300 w-max flex flex-col gap-y-8">
+            <div className="bg-white p-10 rounded-lg shadow-lg shadow-purple-300 w-max flex flex-col gap-y-8">
                 <div className="relative ">
                     <input
                         required
@@ -83,7 +85,11 @@ const login = ({ auth, setAuth }: AuthProps) => {
                 >
                     Submit
                 </button>
-            </form>
+
+                <button className="w-full py-2 text-white bg-purple-700 rounded-lg capitalize font-semibold cursor-pointer">
+                    <a href={getGoogleUrl()}>Login With Google</a>
+                </button>
+            </div>
         </div>
     )
 }
