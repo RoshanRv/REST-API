@@ -43,7 +43,12 @@ const register = () => {
     return (
         <div className="flex justify-center items-center min-h-screen bg-gradient-to-br  from-sky-300 to-sky-500 ">
             <form className="bg-white p-10 rounded-lg shadow-lg shadow-purple-300 w-max flex flex-col gap-y-8">
-                <p className="text-red-600 py-2">{registerError}</p>
+                {registerError && (
+                    <p className="text-red-600 py-2">{registerError}</p>
+                )}
+                <h1 className="text-3xl text-purple-500 text-center font-semibold">
+                    Sign In
+                </h1>
 
                 <div className="relative ">
                     <input

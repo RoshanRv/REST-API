@@ -43,7 +43,7 @@
         "typescript": "^4.8.4"
     },
     "_moduleAliases": {
-        "@root": ".",
+        "@root": "./",
         "@controller": "src/controller",
         "@middleware": "src/middleware",
         "@models": "src/models",
