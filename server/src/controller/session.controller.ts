@@ -138,8 +138,9 @@ export const googleAuthHandler = async (req: Request, res: Response) => {
         res.cookie("refreshToken", refreshToken, refreshTokenOptions)
 
         return res.redirect(`${config.get("origin")}`)
-    } catch (e) {
+    } catch (e: any) {
         console.log(e)
+        console.log(e.message)
         return res.redirect(`${config.get("origin")}/auth/login`)
     }
 }
