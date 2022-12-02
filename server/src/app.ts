@@ -18,7 +18,7 @@ app.use(cookieParser())
 
 app.use(
     cors({
-        origin: "*",
+        origin: "https://rest-api-ui.vercel.app/",
         credentials: true,
     })
 )
