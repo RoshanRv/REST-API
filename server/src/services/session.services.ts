@@ -89,10 +89,11 @@ export const getGoogleOauthTokens = async ({
                 },
             }
         )
+        console.log({ data: res.data })
 
         return res.data
     } catch (e: any) {
-        console.log(e)
+        console.log(e.response.data.error)
         throw new Error(e.message)
     }
 }

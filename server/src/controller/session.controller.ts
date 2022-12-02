@@ -78,8 +78,21 @@ export const deleteSessionHandler = async (req: Request, res: Response) => {
 
     await updateSession({ _id: sessionId }, { valid: false })
 
-    res.clearCookie("accessToken")
-    res.clearCookie("refreshToken")
+    res.cookie("accessToken", null, {
+        httpOnly: true,
+        maxAge: 900000,
+        sameSite: "none",
+        secure: true,
+        path: "/",
+    })
+
+    res.cookie("refreshToken", null, {
+        httpOnly: true,
+        maxAge: 3.154e10,
+        sameSite: "none",
+        secure: true,
+        path: "/",
+    })
 
     return res.send({
         accessToken: null,
@@ -91,8 +104,6 @@ export const googleAuthHandler = async (req: Request, res: Response) => {
     try {
         //get code from query
         const code = req.query.code as string
-
-        console.log({ code })
 
         // get id and access token using code
         const { access_token, id_token } = await getGoogleOauthTokens({ code })
