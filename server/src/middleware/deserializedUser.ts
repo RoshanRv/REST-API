@@ -36,8 +36,8 @@ const deserializedUser = async (
                 httpOnly: true,
                 maxAge: 3.154e10,
                 domain: "localhost",
-                sameSite: "strict",
-                secure: false,
+                sameSite: "lax",
+                secure: true,
                 path: "/",
             })
         }

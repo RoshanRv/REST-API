@@ -19,7 +19,7 @@ const accessTokenOptions: CookieOptions = {
     maxAge: 900000,
     domain: "localhost",
     sameSite: "lax",
-    secure: false,
+    secure: true,
     path: "/",
 }
 
