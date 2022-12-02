@@ -17,7 +17,7 @@ import config from "config"
 const accessTokenOptions: CookieOptions = {
     httpOnly: true,
     maxAge: 900000,
-    //sameSite: "lax",
+    sameSite: "none",
     secure: true,
     path: "/",
 }
@@ -92,8 +92,12 @@ export const googleAuthHandler = async (req: Request, res: Response) => {
         //get code from query
         const code = req.query.code as string
 
+        console.log({ code })
+
         // get id and access token using code
         const { access_token, id_token } = await getGoogleOauthTokens({ code })
+
+        console.log({ access_token, id_token })
 
         // get user from id_token
         const googleUser = await getGoogleUser({ access_token, id_token })
