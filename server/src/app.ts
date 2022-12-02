@@ -18,7 +18,7 @@ app.use(cookieParser())
 
 app.use(
     cors({
-        origin: config.get("origin"),
+        origin: "*",
         credentials: true,
     })
 )
