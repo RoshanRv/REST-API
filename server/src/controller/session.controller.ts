@@ -78,7 +78,7 @@ export const deleteSessionHandler = async (req: Request, res: Response) => {
 
     await updateSession({ _id: sessionId }, { valid: false })
 
-    res.cookie("accessToken", null, {
+    res.clearCookie("accessToken", {
         httpOnly: true,
         maxAge: 900000,
         sameSite: "none",
@@ -86,7 +86,7 @@ export const deleteSessionHandler = async (req: Request, res: Response) => {
         path: "/",
     })
 
-    res.cookie("refreshToken", null, {
+    res.clearCookie("refreshToken", {
         httpOnly: true,
         maxAge: 3.154e10,
         sameSite: "none",
