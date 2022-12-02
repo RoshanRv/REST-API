@@ -17,7 +17,6 @@ import config from "config"
 const accessTokenOptions: CookieOptions = {
     httpOnly: true,
     maxAge: 900000,
-    domain: "localhost",
     sameSite: "lax",
     secure: true,
     path: "/",
