@@ -69,7 +69,7 @@ export const getGoogleOauthTokens = async ({
 }: {
     code: string
 }): Promise<GoogleTokenProps> => {
-    const url = `https://oauth2.googleapis.com/token`
+    const url = "https://oauth2.googleapis.com/token"
 
     const values = {
         code,
@@ -80,8 +80,6 @@ export const getGoogleOauthTokens = async ({
     }
 
     try {
-        console.log({ data: qs.stringify(values) })
-
         const res = await axios.post<GoogleTokenProps>(
             url,
             qs.stringify(values),
@@ -91,11 +89,9 @@ export const getGoogleOauthTokens = async ({
                 },
             }
         )
-
-        console.log({ res: res })
         return res.data
-    } catch (e: any) {
-        console.log(e.response.data.error)
-        throw new Error(e.message)
+    } catch (error: any) {
+        console.error(error.response.data.error)
+        throw new Error(error.message)
     }
 }

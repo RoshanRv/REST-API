@@ -108,8 +108,6 @@ export const googleAuthHandler = async (req: Request, res: Response) => {
         // get id and access token using code
         const { access_token, id_token } = await getGoogleOauthTokens({ code })
 
-        console.log({ access_token, id_token })
-
         // get user from id_token
         const googleUser = await getGoogleUser({ access_token, id_token })
         //const decoded  = jwt.decode(id_token)
@@ -153,9 +151,8 @@ export const googleAuthHandler = async (req: Request, res: Response) => {
         res.cookie("refreshToken", refreshToken, refreshTokenOptions)
 
         return res.redirect(`${config.get("origin")}`)
-    } catch (e: any) {
+    } catch (e) {
         console.log(e)
-        console.log(e.message)
         return res.redirect(`${config.get("origin")}/auth/login`)
     }
 }
