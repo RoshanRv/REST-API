@@ -2,7 +2,7 @@
 
 A Webapp to Fetch, Add, Update & Delete Users Details, Session, & Products With Authentication.
 
-![preview](https://media-exp1.licdn.com/dms/image/C5622AQHcJ4jrqJ5nlQ/feedshare-shrink_800/0/1669389984867?e=1672272000&v=beta&t=wU9G3yL3k9UR8uXmWJxtLxUAoAkTn3wAaQs32hBVjvE)
+![preview](https://user-images.githubusercontent.com/75238302/209446220-981df53b-2b1d-4ae5-9d92-848600da9e72.png)
 
 ## Technologies :
 
